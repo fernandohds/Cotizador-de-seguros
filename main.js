@@ -76,21 +76,22 @@ function validarForm() {
         agregarAlDom();
         inputMarca.focus();
 
-        localStorage.setItem("autosAgregados", JSON.stringify(arrayAuto));
+        localStorage.setItem("autosAgregados", JSON.stringify( arrayAuto ));
         } 
     }   
+    
     autosGuardados = JSON.parse(localStorage.getItem("autosAgregados"));
  console.log(autosGuardados);
     function agregarAlDom() {
         for (coche of autosGuardados) {
-          contenedor.innerHTML = `<div class="card col-sm-3 m-1"> 
-                                  <ul class="list-group list-group-flush">
-                                  <li class="list-group-item">Marca: ${coche.marca}</li>
-                                  <li class="list-group-item">Año: ${coche.anio}</li> 
-                                  <li class="list-group-item">Teléfono: ${coche.telefono}</li> 
-                                  <li class="list-group-item">Email: ${coche.mail} </li>
-                                  <li class="list-group-item">Tipo de plan: ${coche.plan} </li>
-                                  <li class="list-group-item">Compañia de seguros: ${coche.compa}</li>
+          contenedor.innerHTML = `<div class="card text-white bg-secondary mb-3 col-sm-3 m-1 mx-auto"> 
+                                  <ul class="list-group list-group-flush mx-auto">
+                                  <li class="list-group-item text-white bg-primary">Marca: ${coche.marca}</li>
+                                  <li class="list-group-item text-white bg-primary">Año: ${coche.anio}</li> 
+                                  <li class="list-group-item text-white bg-primary">Teléfono: ${coche.telefono}</li> 
+                                  <li class="list-group-item text-white bg-primary">Email: ${coche.mail} </li>
+                                  <li class="list-group-item text-white bg-primary">Tipo de plan: ${coche.plan} </li>
+                                  <li class="list-group-item text-white bg-primary">Compañia de seguros: ${coche.compa}</li>
                                   </ul> 
                                   <div class="card-footer"> Un asesor se comunicará con usted pronto.</div> </div>`  
                                        }
@@ -105,7 +106,7 @@ function onRequestHandler() {
         const HTMLResponse = document.querySelector("#compa");
 
         const tpl = data.map(compania => `<option>${compania.Denominacion}</option>`);
-        HTMLResponse.innerHTML = `<select>${tpl}</select>`
+        HTMLResponse.innerHTML = `<select><option selected class="elSelect">Selecciona la compañia de seguros</option>${tpl}</select>`
     } 
 }
 // ver como se metia ajax

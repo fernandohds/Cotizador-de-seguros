@@ -56,8 +56,10 @@
     font-size: 16px;
     box-sizing: border-box;
   }
-  
- .losDatos {
+  .elSelect {
+    text-align: center;
+  }
+ /* .losDatos {
   margin: auto;
   align-content: center;
- }
+ } */
