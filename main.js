@@ -1,4 +1,3 @@
-
 class Auto {
     constructor(marca, anio, telefono, mail, plan, compa) {
         this.marca  = marca;
@@ -24,11 +23,7 @@ let parrafos = displayTodos.getElementsByTagName("p");
 let bandera = false;
 
 
-
-
-
 miForm.addEventListener('submit', agregarAuto);
-// btnMostrar.addEventListener('click', MostrarTodosAutos);
 
 inputMarca.focus();
 
@@ -39,14 +34,10 @@ function validarForm() {
      input4  = frm.children[4].value;
      input5  = frm.children[5].value;
      input6  = frm.children[6].value;
-        console.log(input1);
-        console.log(input2);
-        console.log(input3);
-        console.log(input4);
-        console.log(input5);
-        console.log(input6);
+       
         if (input1 == '' || input2 == '' || input3 == '' || input4 == '' || input5 == '') {
-            alert('Error. Completa todos los campos')
+            
+            Swal.fire('Error. Completá todos los campos')
         
         inputMarca.focus(); 
         bandera = false;}
@@ -56,47 +47,63 @@ function validarForm() {
     }
    
     function agregarAuto (e) {
+        arrayAuto=[]
         e.preventDefault();
         validarForm();
         if (bandera == true) {
-          let opcion = confirm("Estan los datos correctamente ingresados?");
-          if (opcion == true) {
-              let frm = e.target
-              arrayAuto.push(new Auto(input1,input2,input3,input4,input5,input6));
-          } else {
-              alert ('No se cotizara');
-          }   
-            frm.children[1].value = '';
-            frm.children[2].value = '';
-            frm.children[3].value = '';
-            frm.children[4].value = '';
-            frm.children[5].value = '';
-            frm.children[6].value = '';
-            contenedor.innerHTML = '';
-        agregarAlDom();
-        inputMarca.focus();
+          
+          Swal.fire({
+            title: 'Confirmacion',
+            text: "Estan los datos correctamente ingresados?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, son correctos'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                
+                let frm = document.getElementById('frm')
+                for (let i = 1; i <= 6; i++) {
+                    const inputElement = frm.children[i];
+                    let inputValue=inputElement.value
+                    let inputName =inputElement.name
+                    let object = {
+                        nombre: inputName,
+                        valor: inputValue
+                    }
+                    arrayAuto.push(object)          
+                    localStorage.setItem("autosAgregados", JSON.stringify( arrayAuto ));
+                } 
+                
+            agregarAlDom();
+            inputMarca.focus();
 
-        localStorage.setItem("autosAgregados", JSON.stringify( arrayAuto ));
+            }else{
+                Swal.fire(
+                   'No se cotizara')
+            }
+          })
+        }
         } 
-    }   
-    
-    autosGuardados = JSON.parse(localStorage.getItem("autosAgregados"));
- console.log(autosGuardados);
+     
     function agregarAlDom() {
-        for (coche of autosGuardados) {
-          contenedor.innerHTML = `<div class="card text-white bg-secondary mb-3 col-sm-3 m-1 mx-auto"> 
+        autosGuardados = JSON.parse(localStorage.getItem("autosAgregados"));
+        
+           contenedor.innerHTML = `<div class="card text-white bg-secondary mb-3 col-sm-3 m-1 mx-auto"> 
                                   <ul class="list-group list-group-flush mx-auto">
-                                  <li class="list-group-item text-white bg-primary">Marca: ${coche.marca}</li>
-                                  <li class="list-group-item text-white bg-primary">Año: ${coche.anio}</li> 
-                                  <li class="list-group-item text-white bg-primary">Teléfono: ${coche.telefono}</li> 
-                                  <li class="list-group-item text-white bg-primary">Email: ${coche.mail} </li>
-                                  <li class="list-group-item text-white bg-primary">Tipo de plan: ${coche.plan} </li>
-                                  <li class="list-group-item text-white bg-primary">Compañia de seguros: ${coche.compa}</li>
+                                  <li class="list-group-item text-white bg-primary">Marca: ${autosGuardados[0].valor}</li>
+                                  <li class="list-group-item text-white bg-primary">Año: ${autosGuardados[1].valor}</li> 
+                                  <li class="list-group-item text-white bg-primary">Teléfono: ${autosGuardados[2].valor}</li> 
+                                  <li class="list-group-item text-white bg-primary">Email: ${autosGuardados[3].valor} </li>
+                                  <li class="list-group-item text-white bg-primary">Tipo de plan: ${autosGuardados[4].valor} </li>
+                                  <li class="list-group-item text-white bg-primary">Compañia de seguros: ${autosGuardados[5].valor}</li>
                                   </ul> 
                                   <div class="card-footer"> Un asesor se comunicará con usted pronto.</div> </div>`  
+                                
                                        }
-                            }
-    const URL = "http://rubricadigital.ssn.gob.ar/api/api/generics";
+
+ const URL = "http://rubricadigital.ssn.gob.ar/api/api/generics";
 
 const xhr = new XMLHttpRequest();
 function onRequestHandler() {
@@ -109,29 +116,8 @@ function onRequestHandler() {
         HTMLResponse.innerHTML = `<select><option selected class="elSelect">Selecciona la compañia de seguros</option>${tpl}</select>`
     } 
 }
-// ver como se metia ajax
+
 xhr.addEventListener("load", onRequestHandler);
 xhr.open ("GET", `${URL}/getcompanias`);
 xhr.send();
-    //  for (marca of autosGuardados) {
-          
-    //    }
-    //    contenedor.innerHTML = autosGuardados;
-    // function MostrarTodosAutos (e) {
-    //     e.preventDefault ();
-    //     let i = 0;
-    //     displayTodos.innerHTML = '<h2>Listado de todos los autos cotizados</h2>';
-    //       for (const autito of autosGuardados) {
-    //     displayTodos.innerHTML += `
-    //     <h2>Ultimo Auto cotizado:</h2>
-    //     <p>Marca: ${autito.marca} </p>
-    //     <p>Año: ${autito.anio} </p>
-    //     <p>Precio: ${autito.precio} </p>
-    //     <p>Mail: ${autito.mail} </p>
-    //     <p>Plan: ${autito.plan} </p>`    
-    //       }
-    // }
-
-    // const guardarLocal = (clave, valor) => {localStorage.setItem(clave, valor)};
-
-    // guardarLocal('listaAutos', JSON.stringify(arrayAuto));
+   
